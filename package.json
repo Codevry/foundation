@@ -16,6 +16,8 @@
   "dependencies": {
     "hono": "^4.9.0",
     "hono-rate-limiter": "^0.4.2",
-    "ioredis": "^5.7.0"
+    "ioredis": "^5.7.0",
+    "zod": "^4.0.17",
+    "zod-validation-error": "^4.0.1"
   }
 }
