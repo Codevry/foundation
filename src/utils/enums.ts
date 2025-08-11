@@ -1,8 +1,8 @@
 export enum EnumPeriod {
-    hourly,
-    daily,
-    weekly,
-    monthly,
-    yearly,
-    custom,
+    hourly = "hourly",
+    daily = "daily",
+    weekly = "weekly",
+    monthly = "monthly",
+    yearly = "yearly",
+    custom = "custom",
 }
