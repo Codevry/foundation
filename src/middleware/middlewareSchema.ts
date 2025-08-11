@@ -9,7 +9,6 @@ import type { TypeZodSchema } from "@/src/types/typeZod.ts";
 import { fromError } from "zod-validation-error";
 
 export function MiddlewareSchemaValidate(
-    errorId: number,
     schema: TypeZodSchema
 ): MiddlewareHandler {
     return createMiddleware(async (c: Context, next: Next) => {
