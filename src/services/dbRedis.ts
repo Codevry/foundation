@@ -1,14 +1,11 @@
 import Redis from "ioredis";
-import type {
-    TypeRedisOptions,
-    TypeRedisStatus,
-} from "@/src/types/typeRedis.ts";
+import type { TypeRedisStatus } from "@/src/types/typeRedis.ts";
 
 export class DbRedis {
     redis: Redis;
 
-    constructor(options: TypeRedisOptions) {
-        this.redis = new Redis(options);
+    constructor() {
+        this.redis = new Redis(Bun.env.REDIS_URL);
     }
 
     /**
@@ -55,7 +52,7 @@ export class DbRedis {
      * @param key
      */
     async exists(key: string) {
-        return this.redis.exists(key);
+        return (await this.redis.exists(key)) > 0;
     }
 
     /**
