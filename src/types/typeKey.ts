@@ -6,3 +6,9 @@ export type TypeKey = {
     period: EnumPeriod;
     customPeriod?: number;
 };
+
+export type TypeKeyGenerated = {
+    limit: number;
+    period: EnumPeriod;
+    customPeriod?: number;
+};
