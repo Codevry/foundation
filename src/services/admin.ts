@@ -7,6 +7,9 @@ export default class Admin {
     async generateKey() {
         const existing = await Globals.dbRedis.get("/admin/key");
         if (existing) return existing;
-        else return Globals.dbRedis.create("/admin/key", crypto.randomUUID());
+        else {
+            await Globals.dbRedis.create("/admin/key", crypto.randomUUID());
+            return await Globals.dbRedis.get("/admin/key");
+        }
     }
 }
