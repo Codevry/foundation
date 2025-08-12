@@ -31,4 +31,12 @@ app.put(
     })
 );
 
+// delete the key
+app.delete(
+    "/:key",
+    MiddlewareResponse(async (c: Context) => {
+        return Globals.ctrlKeys.deleteKey(c.req.param("key"));
+    })
+);
+
 export default app;
