@@ -55,4 +55,14 @@ export default class CtrlKeys {
                 message: `key ${key} deleted`,
             };
     }
+
+    /**
+     * get key data
+     * @param key
+     */
+    async getKey(key: string) {
+        const data = await Globals.dbRedis.get(`api:keys:${key}`);
+        if (!data) throw new ErrorObject(404, "key not found");
+        else return JSON.parse(data);
+    }
 }
