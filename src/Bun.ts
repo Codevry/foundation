@@ -3,5 +3,6 @@ declare module "bun" {
         REDIS_URL: string;
         REDIRECT_URL_OPEN: string;
         REDIRECT_URL_SECURE: string;
+        WEEK_STARTS_ON_SUNDAY: boolean;
     }
 }

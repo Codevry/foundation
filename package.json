@@ -14,6 +14,7 @@
     "typescript": "^5"
   },
   "dependencies": {
+    "date-fns": "^4.1.0",
     "hono": "^4.9.0",
     "hono-rate-limiter": "^0.4.2",
     "ioredis": "^5.7.0",
