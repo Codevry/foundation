@@ -42,4 +42,17 @@ export default class CtrlKeys {
 
         return { ...body };
     }
+
+    /**
+     * delete api key
+     */
+    async deleteKey(key: string) {
+        const count = await Globals.dbRedis.delete(`api:keys:${key}`);
+        if (count === 0) throw new ErrorObject(404, "key not found");
+        else
+            return {
+                success: true,
+                message: `key ${key} deleted`,
+            };
+    }
 }
