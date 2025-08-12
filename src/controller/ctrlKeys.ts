@@ -16,8 +16,30 @@ export default class CtrlKeys {
                 ...body,
             })
             .catch((e) => new ErrorObject(502, e));
+
         return {
             key,
+            ...body,
         };
+    }
+
+    /**
+     * modify api key
+     */
+    async modify(body: z.infer<typeof SchemaKeys.modify.body>) {
+        // check key exists
+        const check = await Globals.dbRedis
+            .exists(`api:keys:${body.key}`)
+            .catch((err) => new ErrorObject(502, err));
+
+        // if not then throw error
+        if (!check) throw new ErrorObject(404, "key not found");
+
+        // modify data
+        await Globals.dbRedis
+            .create(`api:keys:${body.key}`, body)
+            .catch((err) => new ErrorObject(502, err));
+
+        return { ...body };
     }
 }
