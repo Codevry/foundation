@@ -13,7 +13,7 @@ export default class Time {
      * @param period
      * @param ttl
      */
-    static calculateRedisTTL(period: EnumPeriod, ttl: number) {
+    static calculateRedisTTL(period: EnumPeriod, ttl?: number): number {
         const now = new Date();
         const weekStartsOnSunday = !!Bun.env.WEEK_STARTS_ON_SUNDAY;
         let endOfPeriod;
@@ -39,11 +39,11 @@ export default class Time {
                 break;
             case EnumPeriod.custom:
                 // The custom TTL is already in seconds, so we just return it.
-                return ttl;
+                return ttl || 1;
             default:
                 // Fallback for an invalid period, returning a default TTL or throwing an error.
                 console.error("Invalid period provided.");
-                return null;
+                return 1;
         }
 
         // Calculate the difference in milliseconds between the end of the period and now.
