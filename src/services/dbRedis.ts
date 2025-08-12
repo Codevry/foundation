@@ -62,4 +62,22 @@ export class DbRedis {
     async delete(key: string) {
         return this.redis.del(key);
     }
+
+    /**
+     * increment value
+     * @param key
+     * @param value
+     */
+    async inc(key: string, value: number = 1) {
+        return this.redis.incrby(key, value);
+    }
+
+    /**
+     * decrement value
+     * @param key
+     * @param value
+     */
+    async dec(key: string, value: number = 1) {
+        return this.redis.decrby(key, value);
+    }
 }
