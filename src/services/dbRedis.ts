@@ -80,4 +80,21 @@ export class DbRedis {
     async dec(key: string, value: number = 1) {
         return this.redis.decrby(key, value);
     }
+
+    /**
+     * set ttl for a given key
+     * @param key
+     * @param ttl - in seconds
+     */
+    async setTTL(key: string, ttl: number) {
+        return this.redis.expire(key, ttl);
+    }
+
+    /**
+     * get ttl for a given key
+     * @param key
+     */
+    async getTTL(key: string) {
+        return this.redis.ttl(key);
+    }
 }
