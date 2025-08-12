@@ -39,4 +39,12 @@ app.delete(
     })
 );
 
+// get the key data
+app.get(
+    "/:key",
+    MiddlewareResponse(async (c: Context) => {
+        return Globals.ctrlKeys.getKey(c.req.param("key"));
+    })
+);
+
 export default app;
