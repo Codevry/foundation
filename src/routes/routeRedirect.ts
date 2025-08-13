@@ -16,7 +16,7 @@ function queryString(query: Record<string, string>) {
 // open routes
 app.all("/open/*", async (c) => {
     const url =
-        Bun.env.REDIRECT_OPEN +
+        Bun.env.REDIRECT_URL_OPEN +
         c.req.path.replace("/route/open", "") +
         queryString(c.req.query());
     return await fetch(url, c.req.raw);
