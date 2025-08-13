@@ -10,7 +10,7 @@ export default createMiddleware(async (c: Context, next: Next) => {
     const keyData: TypeKey = c.get("apiKeyData");
 
     // get next window
-    const resetAt = Time.calculateRedisTTL(
+    const resetIn = Time.calculateRedisTTL(
         keyData.period,
         keyData.customPeriod
     );
@@ -19,7 +19,7 @@ export default createMiddleware(async (c: Context, next: Next) => {
     function setRateHeaders(remaining: number) {
         c.header("X-RateLimit-Limit", keyData.limit.toString());
         c.header("X-RateLimit-Remaining", remaining.toString());
-        c.header("X-RateLimit-Reset", resetAt.toString());
+        c.header("X-RateLimit-Reset", (Date.now() + resetIn * 1000).toString());
     }
 
     // get limit value
@@ -32,8 +32,8 @@ export default createMiddleware(async (c: Context, next: Next) => {
 
         // limit exceeded
         if (limitValue === 0) {
-            // get a reset window in seconds
-            const resetIn = resetAt - Date.now();
+            // get a reset window
+            const resetAt = resetIn * 1000 + Date.now();
 
             // set rate headers
             setRateHeaders(0);
@@ -62,9 +62,11 @@ export default createMiddleware(async (c: Context, next: Next) => {
                 .dec(`api:limits:${keyData.key}`)
                 .catch((err) => new ErrorObject(502, err));
 
-            // set headers & proceed
+            // get response
+            await next();
+
+            // set headers
             setRateHeaders(limitValue - 1);
-            return next();
         }
     }
 
@@ -77,10 +79,10 @@ export default createMiddleware(async (c: Context, next: Next) => {
 
         // set expiry
         await Globals.dbRedis
-            .setTTL(`api:limits:${keyData.key}`, resetAt)
+            .setTTL(`api:limits:${keyData.key}`, resetIn)
             .catch((err) => new ErrorObject(502, err));
 
+        await next();
         setRateHeaders(keyData.limit);
-        return next();
     }
 });
