@@ -1,8 +1,10 @@
 import { DbRedis } from "@/src/services/dbRedis.ts";
 import Globals from "@/src/utils/globals.ts";
 import Admin from "@/src/services/admin.ts";
-import routesAdmin from "@/src/routes/routeKeys.ts";
+import routeKeys from "@/src/routes/routeKeys.ts";
 import { Hono } from "hono";
+import { logger } from "hono/logger";
+import routeRedirect from "@/src/routes/routeRedirect.ts";
 
 // initializers
 Globals.dbRedis = new DbRedis();
@@ -23,7 +25,10 @@ console.log(key);
 // apply routes
 const app = new Hono();
 
-app.route("/admin/keys", routesAdmin);
+app.use(logger());
+
+app.route("/admin/keys", routeKeys);
+app.route("/route", routeRedirect);
 
 export default {
     port: 3131,
