@@ -69,14 +69,20 @@ export default class CtrlKeys {
 
     /**
      * reset limit
-     * @param keyData
+     * @param key
      */
-    async resetLimit(keyData: TypeKey) {
+    async resetLimit(key: string) {
+        // check key exists
+        const data = await Globals.dbRedis.get(`api:keys:${key}`);
+
+        // if not then throw error
+        if (!data) throw new ErrorObject(404, "key not found");
+
+        // parse data
+        const keyData: TypeKey = JSON.parse(data!!);
+
         // update limit
-        await Globals.dbRedis.create(
-            `api:limits:${keyData.key}`,
-            keyData.limit
-        );
+        await Globals.dbRedis.create(`api:limits:${key}`, keyData.limit);
 
         // set new ttl
         await Globals.dbRedis.setTTL(
@@ -87,6 +93,36 @@ export default class CtrlKeys {
         return {
             success: true,
             message: `limit reset for ${keyData.key} to ${keyData.limit} requests / ${keyData.period || keyData.customPeriod}`,
+        };
+    }
+
+    /**
+     * change key period and reset
+     * @param body
+     */
+    async changeAndResetLimit(body: z.infer<typeof SchemaKeys.modify.body>) {
+        // check key exists
+        const data = await Globals.dbRedis.get(`api:keys:${body.key}`);
+
+        // if not then throw error
+        if (!data) throw new ErrorObject(404, "key not found");
+
+        // modify data
+        await Globals.dbRedis.create(`api:keys:${body.key}`, body);
+
+        // reset limits
+        await Globals.dbRedis.create(`api:limits:${body.key}`, body.limit);
+
+        // set new ttl
+        await Globals.dbRedis.setTTL(
+            `api:limits:${body.key}`,
+            Time.calculateRedisTTL(body.period, body.customPeriod)
+        );
+
+        return {
+            success: true,
+            message: `modified and reset limit`,
+            data: body,
         };
     }
 }
