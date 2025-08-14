@@ -47,4 +47,21 @@ app.get(
     })
 );
 
+// reset limits
+app.put(
+    "/:key/limit/reset",
+    MiddlewareResponse(async (c: Context) => {
+        return Globals.ctrlKeys.resetLimit(c.req.param("key"));
+    })
+);
+
+// change & reset limit
+app.put(
+    "/limit/change",
+    MiddlewareSchemaValidate(schemaKeys.modify),
+    MiddlewareResponse(async (c: Context) => {
+        return Globals.ctrlKeys.changeAndResetLimit(await c.req.json());
+    })
+);
+
 export default app;
