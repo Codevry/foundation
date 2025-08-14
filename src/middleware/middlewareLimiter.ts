@@ -74,7 +74,7 @@ export default createMiddleware(async (c: Context, next: Next) => {
     else {
         // create a new entry in redis
         await Globals.dbRedis
-            .create(`api:limits:${keyData.key}`, keyData.limit)
+            .create(`api:limits:${keyData.key}`, keyData.limit - 1)
             .catch((err: any) => new ErrorObject(502, err));
 
         // set expiry
@@ -83,6 +83,6 @@ export default createMiddleware(async (c: Context, next: Next) => {
             .catch((err) => new ErrorObject(502, err));
 
         await next();
-        setRateHeaders(keyData.limit);
+        setRateHeaders(keyData.limit - 1);
     }
 });
