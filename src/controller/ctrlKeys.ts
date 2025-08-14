@@ -2,6 +2,8 @@ import { z } from "zod";
 import Globals from "@/src/utils/globals.ts";
 import type SchemaKeys from "@/src/schema/schemaKeys.ts";
 import { ErrorObject } from "@/src/utils/errorObject.ts";
+import type { TypeKey } from "@/src/types/typeKey.ts";
+import Time from "@/src/services/time.ts";
 
 export default class CtrlKeys {
     /**
@@ -63,5 +65,28 @@ export default class CtrlKeys {
         const data = await Globals.dbRedis.get(`api:keys:${key}`);
         if (!data) throw new ErrorObject(404, "key not found");
         else return JSON.parse(data);
+    }
+
+    /**
+     * reset limit
+     * @param keyData
+     */
+    async resetLimit(keyData: TypeKey) {
+        // update limit
+        await Globals.dbRedis.create(
+            `api:limits:${keyData.key}`,
+            keyData.limit
+        );
+
+        // set new ttl
+        await Globals.dbRedis.setTTL(
+            `api:limits:${keyData.key}`,
+            Time.calculateRedisTTL(keyData.period, keyData.customPeriod)
+        );
+
+        return {
+            success: true,
+            message: `limit reset for ${keyData.key} to ${keyData.limit} requests / ${keyData.period || keyData.customPeriod}`,
+        };
     }
 }
