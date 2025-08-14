@@ -1,5 +1,6 @@
 import Redis from "ioredis";
 import type { TypeRedisStatus } from "@/src/types/typeRedis.ts";
+import { ErrorObject } from "@/src/utils/errorObject.ts";
 
 export class DbRedis {
     redis: Redis;
@@ -34,9 +35,16 @@ export class DbRedis {
      * @param value
      */
     async create(key: string, value: string | number | object) {
-        let data;
-        data = typeof value === "object" ? JSON.stringify(value) : value;
-        return this.redis.set(key, data);
+        try {
+            let data;
+            data = typeof value === "object" ? JSON.stringify(value) : value;
+            return this.redis.set(key, data);
+        } catch (e: any) {
+            throw new ErrorObject(
+                502,
+                `issue with redis : ${e?.message || e?.toString()}`
+            );
+        }
     }
 
     /**
@@ -44,7 +52,14 @@ export class DbRedis {
      * @param key
      */
     async get(key: string) {
-        return this.redis.get(key);
+        try {
+            return this.redis.get(key);
+        } catch (e: any) {
+            throw new ErrorObject(
+                502,
+                `issue with redis : ${e?.message || e?.toString()}`
+            );
+        }
     }
 
     /**
@@ -52,7 +67,14 @@ export class DbRedis {
      * @param key
      */
     async exists(key: string) {
-        return (await this.redis.exists(key)) > 0;
+        try {
+            return (await this.redis.exists(key)) > 0;
+        } catch (e: any) {
+            throw new ErrorObject(
+                502,
+                `issue with redis : ${e?.message || e?.toString()}`
+            );
+        }
     }
 
     /**
@@ -60,7 +82,14 @@ export class DbRedis {
      * @param key
      */
     async delete(key: string) {
-        return this.redis.del(key);
+        try {
+            return this.redis.del(key);
+        } catch (e: any) {
+            throw new ErrorObject(
+                502,
+                `issue with redis : ${e?.message || e?.toString()}`
+            );
+        }
     }
 
     /**
@@ -69,7 +98,14 @@ export class DbRedis {
      * @param value
      */
     async inc(key: string, value: number = 1) {
-        return this.redis.incrby(key, value);
+        try {
+            return this.redis.incrby(key, value);
+        } catch (e: any) {
+            throw new ErrorObject(
+                502,
+                `issue with redis : ${e?.message || e?.toString()}`
+            );
+        }
     }
 
     /**
@@ -78,7 +114,14 @@ export class DbRedis {
      * @param value
      */
     async dec(key: string, value: number = 1) {
-        return this.redis.decrby(key, value);
+        try {
+            return this.redis.decrby(key, value);
+        } catch (e: any) {
+            throw new ErrorObject(
+                502,
+                `issue with redis : ${e?.message || e?.toString()}`
+            );
+        }
     }
 
     /**
@@ -87,7 +130,14 @@ export class DbRedis {
      * @param ttl - in seconds
      */
     async setTTL(key: string, ttl: number) {
-        return this.redis.expire(key, ttl);
+        try {
+            return this.redis.expire(key, ttl);
+        } catch (e: any) {
+            throw new ErrorObject(
+                502,
+                `issue with redis : ${e?.message || e?.toString()}`
+            );
+        }
     }
 
     /**
@@ -95,6 +145,13 @@ export class DbRedis {
      * @param key
      */
     async getTTL(key: string) {
-        return this.redis.ttl(key);
+        try {
+            return this.redis.ttl(key);
+        } catch (e: any) {
+            throw new ErrorObject(
+                502,
+                `issue with redis : ${e?.message || e?.toString()}`
+            );
+        }
     }
 }
