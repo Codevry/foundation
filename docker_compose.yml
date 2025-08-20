@@ -1,0 +1,60 @@
+services:
+  redis:
+    image: redis:8.2-rc1-alpine
+    container_name: foundation-redis
+    # If you want a password, set REDIS_PASSWORD in .env; otherwise leave it empty
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-}
+    command: >
+      sh -c '
+        if [ -n "$REDIS_PASSWORD" ]; then
+          exec redis-server --appendonly yes --requirepass "$REDIS_PASSWORD";
+        else
+          exec redis-server --appendonly yes;
+        fi
+      '
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: [ "CMD-SHELL", "redis-cli -a \"$REDIS_PASSWORD\" ping | grep PONG || redis-cli ping | grep PONG" ]
+      interval: 5s
+      timeout: 5s
+      retries: 15
+    networks:
+      - foundation_network
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: foundation-app
+    env_file:
+      - .env
+    environment:
+      # Compose expands these at runtime using values from .env
+      NODE_ENV: production
+      REDIS_URL: 'redis://redis:6379'
+      REDIRECT_URL_OPEN: ${REDIRECT_URL_OPEN}
+      REDIRECT_URL_SECURE: ${REDIRECT_URL_SECURE}
+      WEEK_STARTS_ON_SUNDAY: ${WEEK_STARTS_ON_SUNDAY}
+
+    depends_on:
+      redis:
+        condition: service_healthy
+    ports:
+      # Host:Container
+      - "${PORT:-3131}:3131"
+    restart: unless-stopped
+    networks:
+      - foundation_network
+    # If you have migrations, uncomment the next lines and ensure the scripts exist in package.json:
+    # command: sh -c "bun run db:migrate && bun run start"
+
+volumes:
+  redis_data:
+
+networks:
+  foundation_network:
+    driver: bridge
