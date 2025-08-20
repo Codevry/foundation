@@ -2,13 +2,13 @@
 
 The following environment variables are required for the application:
 
-| Variable              | Type    | Description                                   |
-|-----------------------|---------|-----------------------------------------------|
-| PORT                  | number  | Application port to expose                    |
-| REDIS_PORT            | string  | Redis port to expose                          |
-| REDIRECT_URL_OPEN     | string  | Your service url + path (bypass rate-limit)   |
-| REDIRECT_URL_SECURE   | string  | Your service url + path (enforced rate-limit) |
-| WEEK_STARTS_ON_SUNDAY | boolean | Whether to count sunday as start of new week  |
+| Variable              | Type    | Description                                         |
+|-----------------------|---------|-----------------------------------------------------|
+| PORT                  | number  | Application port to expose (optional; default 3131) |
+| REDIS_PORT            | string  | Redis port to expose (optional; default 6379)       |
+| REDIRECT_URL_OPEN     | string  | Your service url + path (bypass rate-limit)         |
+| REDIRECT_URL_SECURE   | string  | Your service url + path (enforced rate-limit)       |
+| WEEK_STARTS_ON_SUNDAY | boolean | Whether to count sunday as start of new week        |
 
 ## Setup Instructions
 
