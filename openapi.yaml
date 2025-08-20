@@ -1,0 +1,331 @@
+openapi: 3.0.0
+info:
+  title: Foundation
+  version: 1.0.0
+  description: ''
+servers:
+  - url: '{{domain}}'
+paths:
+  /admin/keys:
+    parameters: []
+    post:
+      summary: Key Generate
+      parameters: []
+      responses:
+        '200':
+          headers:
+            Content-Type:
+              schema:
+                type: string
+              example: application/json
+            Date:
+              schema:
+                type: string
+              example: Tue, 12 Aug 2025 05:59:59 GMT
+            Content-Length:
+              schema:
+                type: integer
+              example: '74'
+          description: '200'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  key:
+                    type: string
+                  limit:
+                    type: integer
+                  period:
+                    type: string
+              example:
+                key: d24b52f6-44bc-4ee5-b3f6-a27ec11b1f08
+                limit: 1
+                period: hourly
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                limit:
+                  type: integer
+                period:
+                  type: string
+            example:
+              limit: 1
+              period: hourly
+    put:
+      summary: Key Update
+      parameters: []
+      responses:
+        '200':
+          headers:
+            Content-Type:
+              schema:
+                type: string
+              example: application/json
+            Date:
+              schema:
+                type: string
+              example: Tue, 12 Aug 2025 06:05:42 GMT
+            Content-Length:
+              schema:
+                type: integer
+              example: '97'
+          description: '200'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  key:
+                    type: string
+                  limit:
+                    type: integer
+                  period:
+                    type: string
+                  customPeriod:
+                    type: integer
+              example:
+                key: d24b52f6-44bc-4ee5-b3f6-a27ec11b1f08
+                limit: 100
+                period: custom
+                customPeriod: 10000
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                key:
+                  type: string
+                limit:
+                  type: integer
+                period:
+                  type: string
+                customPeriod:
+                  type: integer
+            example:
+              key: d24b52f6-44bc-4ee5-b3f6-a27ec11b1f08
+              limit: 100
+              period: custom
+              customPeriod: 10000
+  /admin/keys/{key}:
+    parameters:
+      - name: key
+        in: path
+        required: true
+        example: 640567d3-9be9-4987-8f86-d85ca3ddfe26
+        schema:
+          type: integer
+    delete:
+      summary: Key Delete
+      parameters: []
+      responses:
+        '200':
+          headers:
+            Content-Type:
+              schema:
+                type: string
+              example: application/json
+            Date:
+              schema:
+                type: string
+              example: Tue, 12 Aug 2025 06:13:06 GMT
+            Content-Length:
+              schema:
+                type: integer
+              example: '77'
+          description: '200'
+        '404':
+          headers:
+            Content-Type:
+              schema:
+                type: string
+              example: application/json
+            Date:
+              schema:
+                type: string
+              example: Tue, 12 Aug 2025 06:12:36 GMT
+            Content-Length:
+              schema:
+                type: integer
+              example: '41'
+          description: '404'
+    get:
+      summary: Key Get
+      parameters: []
+      responses:
+        '200':
+          headers:
+            Content-Type:
+              schema:
+                type: string
+              example: application/json
+            Date:
+              schema:
+                type: string
+              example: Tue, 12 Aug 2025 06:15:28 GMT
+            Content-Length:
+              schema:
+                type: integer
+              example: '74'
+          description: '200'
+        '404':
+          headers:
+            Content-Type:
+              schema:
+                type: string
+              example: application/json
+            Date:
+              schema:
+                type: string
+              example: Tue, 12 Aug 2025 06:14:51 GMT
+            Content-Length:
+              schema:
+                type: integer
+              example: '41'
+          description: '400'
+  /admin/keys/{key}/limit/reset:
+    parameters:
+      - name: key
+        in: path
+        required: true
+        example: 640567d3-9be9-4987-8f86-d85ca3ddfe26
+        schema:
+          type: integer
+    put:
+      summary: Key Reset Limit
+      parameters: []
+      responses:
+        '200':
+          headers:
+            Content-Type:
+              schema:
+                type: string
+              example: application/json
+            Date:
+              schema:
+                type: string
+              example: Thu, 14 Aug 2025 07:09:09 GMT
+            Content-Length:
+              schema:
+                type: integer
+              example: '104'
+          description: '200'
+  /admin/keys/limit/change:
+    parameters: []
+    put:
+      summary: Key Change & Reset
+      parameters: []
+      responses:
+        '200':
+          headers:
+            Content-Type:
+              schema:
+                type: string
+              example: application/json
+            Date:
+              schema:
+                type: string
+              example: Thu, 14 Aug 2025 07:13:53 GMT
+            Content-Length:
+              schema:
+                type: integer
+              example: '138'
+          description: '200'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                key:
+                  type: string
+                limit:
+                  type: integer
+                period:
+                  type: string
+            example:
+              key: 640567d3-9be9-4987-8f86-d85ca3ddfe26
+              limit: 200
+              period: monthly
+  /route/secure/{path}:
+    parameters:
+      - name: path
+        in: path
+        required: true
+        description: your app path
+        example: ping
+        schema:
+          type: string
+    get:
+      summary: Secure
+      parameters: []
+      responses:
+        '429':
+          headers:
+            Content-Type:
+              schema:
+                type: string
+              example: application/json
+            X-RateLimit-Limit:
+              schema:
+                type: integer
+              example: '1'
+            X-RateLimit-Remaining:
+              schema:
+                type: integer
+              example: '0'
+            X-RateLimit-Reset:
+              schema:
+                type: integer
+              example: '1755070200362'
+            X-Retry-After:
+              schema:
+                type: integer
+              example: '1755070200362'
+            Date:
+              schema:
+                type: string
+              example: Wed, 13 Aug 2025 06:45:13 GMT
+            Content-Length:
+              schema:
+                type: integer
+              example: '131'
+          description: '429'
+  /route/open/{path}:
+    parameters:
+      - name: path
+        in: path
+        required: true
+        description: your app path
+        example: ping
+        schema:
+          type: string
+    get:
+      summary: Open
+      parameters: []
+      responses: {}
+  /:
+    parameters: []
+    get:
+      summary: Ping
+      parameters: []
+      responses:
+        '200':
+          headers:
+            Content-Type:
+              schema:
+                type: string
+              example: application/json
+            Date:
+              schema:
+                type: string
+              example: Wed, 20 Aug 2025 09:56:50 GMT
+            Content-Length:
+              schema:
+                type: integer
+              example: '64'
+          description: '200'
