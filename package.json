@@ -1,5 +1,7 @@
 {
   "name": "foundation",
+  "version": "0.1.0",
+  "description": "Proxy service to add rate-limits in front of your existing APIs",
   "module": "index.ts",
   "type": "module",
   "private": true,
