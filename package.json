@@ -7,10 +7,12 @@
   "private": true,
   "scripts": {
     "dev": "bun run --hot src/index.ts",
+    "release": "commit-and-tag-version",
     "start": "bun run src/index.ts"
   },
   "devDependencies": {
     "@types/bun": "latest",
+    "commit-and-tag-version": "^12.5.2",
     "prettier": "^3.6.2"
   },
   "peerDependencies": {
