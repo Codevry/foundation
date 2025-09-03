@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.2](https://github.com/codevry/foundation/compare/v0.1.1...v0.1.2) (2025-09-03)
+
+
+### Features
+
+* **docs:** license ([c973020](https://github.com/codevry/foundation/commit/c9730200342e961ada4c1505c761815eb1946c0f))
+
 ## 0.1.1 (2025-08-20)
 
 
